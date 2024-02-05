@@ -27,7 +27,6 @@ const Login = ({ navigation }) => {
     }
   };
   useEffect(() => {
-    console.log("useEffect");
     getToken();
   }, []);
 
@@ -43,8 +42,6 @@ const Login = ({ navigation }) => {
     console.log(userData);
     try {
       const response = await Axios.post(user_endpoints.login, userData);
-      console.log(response.data);
-      console.log(response.data.token);
       setEmail("");
       setPassword("");
       await AsyncStorage.setItem("token", response.data.token);
