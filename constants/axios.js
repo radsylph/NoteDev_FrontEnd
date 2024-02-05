@@ -19,9 +19,10 @@ const note_endpoints = {
   create: "notes/create",
   edit: "notes/edit/",
   delete: "notes/delete/",
-  get: "notes/get",
+  getNotes: "notes/getNotes",
   getOne: "notes/get/",
-  create_category: "notes/category",
+  createCategory: "notes/category",
+  getCategories: "notes/getCategories",
 };
 
 export { Axios, user_endpoints, note_endpoints };
