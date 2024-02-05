@@ -9,9 +9,10 @@ import {
   TouchableOpacity,
   TouchableWithoutFeedback,
 } from "react-native";
-
+import { Axios, note_endpoints } from "../constants/axios";
 import Notes from "./Notes";
-
+import { useEffect, useState } from "react";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 const DATA = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -81,15 +82,46 @@ const DATA = [
 ];
 
 export default function Card() {
+  const [notes, setNotes] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [token, setToken] = useState("");
+  const getToken = async () => {
+    await AsyncStorage.getItem("token").then((token) => {
+      console.log(token);
+      setToken(token);
+      getNotes(token);
+    });
+  };
+  const getNotes = async (token) => {
+    try {
+      console.log(`token: ${token}`);
+      const response = await Axios.get(note_endpoints.getNotes, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      // console.log(response.data.notes);
+      setNotes(response.data.notes);
+      console.log(notes);
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  useEffect(() => {
+    getToken();
+    console.log(notes);
+  }, []);
+
   return (
     <View>
-      {DATA.map((faq, index) => (
+      {notes.map((faq, index) => (
         <Notes
           key={index.toString()}
           title={faq.title}
-          details={faq.id}
-          category={faq.category}
-          importancia={faq.importancia}
+          details={faq.description}
+          categoria={faq.category_id}
+          importancia={faq.priority}
         />
       ))}
     </View>

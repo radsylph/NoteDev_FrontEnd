@@ -13,8 +13,9 @@ import {
 
 import COLORS from "../constants/colors";
 import { AntDesign } from "@expo/vector-icons";
+import Icon from "react-native-vector-icons/FontAwesome";
 
-const Notes = ({ title, details }) => {
+const Notes = ({ title, details, category, importancia }) => {
   const [opened, setOpened] = useState(false);
   const [animation] = useState(new Animated.Value(0));
 
@@ -40,14 +41,36 @@ const Notes = ({ title, details }) => {
 
   const heightAnimationInterpolation = animation.interpolate({
     inputRange: [0, 1],
-    outputRange: [0, (numberOfWords / 2.6) * 5],
+    outputRange: [0, numberOfWords],
   });
 
   return (
     <View style={style.container}>
       <TouchableWithoutFeedback onPress={toggleAccordion}>
         <View style={style.header}>
-          <Text>{title}</Text>
+          <View style={{ width: 150 }}>
+            <Text style={{ color: COLORS.white }}>{title}</Text>
+
+            <View style={{ flexDirection: "row" }}>
+              <Text style={{ color: COLORS.white }}>{category}</Text>
+              <Text style={{ color: COLORS.white, marginLeft: 6 }}>
+                Nv:{importancia}
+              </Text>
+            </View>
+          </View>
+
+          <View style={{ display: "flex", flexDirection: "row" }}>
+            <TouchableOpacity style={{ paddingHorizontal: 11 }}>
+              <Icon name="star-o" size={35} color={COLORS.white} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ paddingHorizontal: 11 }}>
+              <Icon name="edit" size={35} color={COLORS.white} />
+            </TouchableOpacity>
+            <TouchableOpacity style={{ paddingHorizontal: 11 }}>
+              <Icon name="trash-o" size={35} color={COLORS.white} />
+            </TouchableOpacity>
+          </View>
+
           <AntDesign name={opened ? "caretup" : "caretdown"} size={16} />
         </View>
       </TouchableWithoutFeedback>
@@ -55,7 +78,7 @@ const Notes = ({ title, details }) => {
       <Animated.View
         style={[style.content, { height: heightAnimationInterpolation }]}
       >
-        <Text style={style.details}>{details}</Text>
+        <Text style={{ color: COLORS.white }}>{details}</Text>
       </Animated.View>
     </View>
   );
@@ -71,7 +94,7 @@ const style = StyleSheet.create({
   container: {
     margin: 10,
     padding: 15,
-    backgroundColor: COLORS.light_orange,
+    backgroundColor: COLORS.purple,
     borderRadius: 6,
   },
 
