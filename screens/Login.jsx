@@ -19,6 +19,18 @@ const Login = ({ navigation }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
+  const getToken = async () => {
+    const token = await AsyncStorage.getItem("token");
+    if (token) {
+      Alert.alert("Success", "Welcome back", [{ text: "OK" }]);
+      navigation.navigate("Home");
+    }
+  };
+  useEffect(() => {
+    console.log("useEffect");
+    getToken();
+  }, []);
+
   const handleSubmit = async () => {
     const userData = {
       email: email,
@@ -36,6 +48,7 @@ const Login = ({ navigation }) => {
       setEmail("");
       setPassword("");
       await AsyncStorage.setItem("token", response.data.token);
+      Alert.alert("Success", "You have logged in", [{ text: "OK" }]);
       navigation.navigate("Home");
     } catch (error) {
       console.log(error);
