@@ -17,9 +17,9 @@ import Floatinbutton from "../components/Floatinbutton";
 
 const Home = ({ navigation }) => {
   return (
-    <View style={{ marginTop: 150 }}>
+    <ScrollView style={{ height: "90%" }}>
       <Card />
-    </View>
+    </ScrollView>
   );
 };
 
