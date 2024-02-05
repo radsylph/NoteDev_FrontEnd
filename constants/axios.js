@@ -1,8 +1,6 @@
-import { create } from "@mui/material/styles/createTransitions";
 import axios from "axios";
-import { get } from "react-native/Libraries/TurboModule/TurboModuleRegistry";
 
-const axios = axios.create({
+const Axios = axios.create({
   baseURL: "https://notedevbackend-production.up.railway.app/",
   timeout: 1000,
   headers: {
@@ -25,3 +23,5 @@ const note_endpoints = {
   getOne: "notes/get/",
   create_category: "notes/category",
 };
+
+export { Axios, user_endpoints, note_endpoints };

@@ -7,12 +7,44 @@ import {
   TextInput,
   Image,
   TouchableOpacity,
+  Alert,
 } from "react-native";
-
 import Btn from "../components/Btn";
 import COLORS from "../constants/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useEffect, useState } from "react";
+import { Axios, user_endpoints } from "../constants/axios";
 
 const Login = ({ navigation }) => {
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+
+  const handleSubmit = async () => {
+    const userData = {
+      email: email,
+      password: password,
+    };
+    if (email === "" || password === "") {
+      Alert.alert("error", "Please fill all the fields", [{ text: "OK" }]);
+      return;
+    }
+    console.log(userData);
+    try {
+      const response = await Axios.post(user_endpoints.login, userData);
+      console.log(response.data);
+      console.log(response.data.token);
+      setEmail("");
+      setPassword("");
+      await AsyncStorage.setItem("token", response.data.token);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+      let errors = error.response.data.message;
+      Alert.alert("error", errors, [{ text: "OK" }]);
+      console.log(errors);
+    }
+  };
+
   return (
     <SafeAreaView style={{ backgroundColor: COLORS.purple }}>
       <View style={{ alignItems: "center" }}>
@@ -64,7 +96,9 @@ const Login = ({ navigation }) => {
               marginVertical: 10,
             }}
             placeholderTextColor={COLORS.purple}
-            placeholder="E-mail/User Name"
+            placeholder="E-mail"
+            value={email}
+            onChangeText={(email) => setEmail(email)}
             keyboardType={"email-address"}
           ></TextInput>
 
@@ -80,6 +114,8 @@ const Login = ({ navigation }) => {
             }}
             placeholderTextColor={COLORS.purple}
             placeholder="Password"
+            value={password}
+            onChangeText={(password) => setPassword(password)}
             secureTextEntry={true}
           ></TextInput>
           <View
@@ -93,7 +129,7 @@ const Login = ({ navigation }) => {
             <Text
               style={{ color: COLORS.purple, fontWeight: "bold", fontSize: 16 }}
             >
-              Forger Password?
+              Forget your Password?
             </Text>
           </View>
           <Btn
@@ -102,7 +138,7 @@ const Login = ({ navigation }) => {
             textColor={COLORS.white}
             btnLabel="Login"
             Press={() => {
-              alert("Logged In"), navigation.navigate("Home");
+              handleSubmit();
             }}
           />
           <View
