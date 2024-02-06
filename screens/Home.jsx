@@ -14,12 +14,21 @@ import Btn from "../components/Btn";
 import COLORS from "../constants/colors";
 import Card from "../components/Card";
 import Floatinbutton from "../components/Floatinbutton";
+import Cathorisonal from "../components/Cathorisonal";
 
 const Home = ({ navigation }) => {
   return (
-    <ScrollView style={{ height: "90%" }}>
-      <Card />
-    </ScrollView>
+    <SafeAreaView>
+      <View style={{ flexDirection: "row", height: "auto" }}>
+        <Cathorisonal />
+      </View>
+      <ScrollView style={{ height: "90%" }}>
+        <Card />
+      </ScrollView>
+      <View>
+        <Floatinbutton />
+      </View>
+    </SafeAreaView>
   );
 };
 
