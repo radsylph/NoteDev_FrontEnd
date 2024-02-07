@@ -16,6 +16,7 @@ import Card from "../components/Card";
 import Floatinbutton from "../components/Floatinbutton";
 import Cathorisonal from "../components/Cathorisonal";
 
+
 const Home = ({ navigation }) => {
   return (
     <SafeAreaView>
