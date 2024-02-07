@@ -82,9 +82,10 @@ const DATA = [
   },
 ];
 
-export default function Card() {
+export default function Card({ toggleFav }) {
   const [notes, setNotes] = useState([]);
   const [categories, setCategories] = useState([]);
+  const [onlyFav, setOnlyFav] = useState(false);
   const [token, setToken] = useState("");
   const isFocused = useIsFocused();
 
@@ -103,13 +104,29 @@ export default function Card() {
           Authorization: `Bearer ${token}`,
         },
       });
-      // console.log(response.data.notes);
-      setNotes(response.data.notes);
+      const notes = response.data.notes;
+      setNotes(notes.sort((a, b) => a.priority - b.priority));
       console.log(notes);
     } catch (error) {
       console.log(error);
     }
   };
+
+  const deleteNote = async (id) => {
+    try {
+      const response = await Axios.delete(note_endpoints.delete + id, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      setNotes(notes.filter((note) => note._id !== id));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const favoriteNotes = notes.filter((note) => note.favorite === true);
 
   useEffect(() => {
     if (isFocused) {
@@ -118,19 +135,35 @@ export default function Card() {
     }
   }, [isFocused]);
 
+  useEffect(() => {}, [notes]);
+
   return (
     <View>
-      {notes.map((faq, index) => (
-        <Notes
-          key={index.toString()}
-          title={faq.title}
-          details={faq.description}
-          categoria={faq.category}
-          importancia={faq.priority}
-          id={faq._id}
-          fav={faq.favorite}
-        />
-      ))}
+      {toggleFav === false
+        ? notes.map((faq, index) => (
+            <Notes
+              key={index.toString()}
+              title={faq.title}
+              details={faq.description}
+              categoria={faq.category}
+              importancia={faq.priority}
+              id={faq._id}
+              fav={faq.favorite}
+              onDelete={deleteNote}
+            />
+          ))
+        : favoriteNotes.map((faq, index) => (
+            <Notes
+              key={index.toString()}
+              title={faq.title}
+              details={faq.description}
+              categoria={faq.category}
+              importancia={faq.priority}
+              id={faq._id}
+              fav={faq.favorite}
+              onDelete={deleteNote}
+            />
+          ))}
     </View>
   );
 }
