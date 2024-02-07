@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   FlatList,
   SafeAreaView,
@@ -8,6 +8,8 @@ import {
   TouchableOpacity,
 } from "react-native";
 import COLORS from "../constants/colors";
+import AsyncStorage from "@react-native-async-storage/async-storage";
+import { Axios, note_endpoints } from "../constants/axios";
 
 const DATA = [
   {
@@ -29,22 +31,56 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
     onPress={onPress}
     style={[styles.item, { backgroundColor }]}
   >
-    <Text style={[styles.title, { color: textColor }]}>{item.title}</Text>
+    <Text style={[styles.title, { color: textColor }]}>{item.name}</Text>
   </TouchableOpacity>
 );
 
-const App = () => {
+const App = ({ setToggleCat }) => {
   const [selectedId, setSelectedId] = useState();
+  const [categories, setCategories] = useState([""]);
+  const [token, setToken] = useState("");
+
+  const getCategories = async (token) => {
+    try {
+      await Axios.get(note_endpoints.getCategories, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }).then((response) => {
+        setCategories(response.data.categories);
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+  const getToken = async () => {
+    await AsyncStorage.getItem("token").then((token) => {
+      setToken(token);
+      getCategories(token);
+    });
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
 
   const renderItem = ({ item }) => {
     const backgroundColor =
-      item.id === selectedId ? COLORS.purple : COLORS.white;
-    const color = item.id === selectedId ? "white" : "black";
+      item._id === selectedId ? COLORS.purple : COLORS.white;
+    const color = item._id === selectedId ? "white" : "black";
 
     return (
       <Item
         item={item}
-        onPress={() => setSelectedId(item.id)}
+        onPress={() => {
+          if (item._id === selectedId) {
+            setSelectedId(null);
+            setToggleCat(null);
+          } else {
+            setSelectedId(item._id);
+            setToggleCat(item.name);
+          }
+        }}
         backgroundColor={backgroundColor}
         textColor={color}
       />
@@ -55,9 +91,9 @@ const App = () => {
     <SafeAreaView style={styles.container}>
       <FlatList
         horizontal={true}
-        data={DATA}
+        data={categories}
         renderItem={renderItem}
-        keyExtractor={(item) => item.id}
+        keyExtractor={(item) => item._id}
         extraData={selectedId}
       />
     </SafeAreaView>
