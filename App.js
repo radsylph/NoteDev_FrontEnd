@@ -2,7 +2,15 @@ import { StatusBar } from "expo-status-bar";
 import { Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { Home, Login, Signup, Welcome, Create_edit, Favorite } from "./screens";
+import {
+  Home,
+  Login,
+  Signup,
+  Welcome,
+  Create_edit,
+  Favorite,
+  EditNote,
+} from "./screens";
 
 const Stack = createNativeStackNavigator();
 export default function App() {
@@ -51,6 +59,13 @@ export default function App() {
         <Stack.Screen
           name="Favorite"
           component={Favorite}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="EditNote"
+          component={EditNote}
           options={{
             headerShown: false,
           }}
