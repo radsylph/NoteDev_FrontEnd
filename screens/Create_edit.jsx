@@ -18,6 +18,7 @@ import Floatinbutton from "../components/Floatinbutton";
 import Inputdata from "../components/Inputdata";
 import Seletcat from "../components/Selectcat";
 import Seletimportance from "../components/Seletimportance";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 import { useState, useEffect } from "react";
 
@@ -29,8 +30,20 @@ const Create_edit = ({ navigation }) => {
   const [importance, setImportance] = useState("");
   const [priority, setPriority] = useState(5);
   const [category, setCategory] = useState([]);
+  const [token, setToken] = useState("");
 
-  const CreateNote = () => {
+  const getToken = async () => {
+    await AsyncStorage.getItem("token").then((token) => {
+      setToken(token);
+    });
+  };
+
+  useEffect(() => {
+    getToken();
+    console.log(token);
+  }, []);
+
+  const CreateNote = async () => {
     const noteData = {
       title: title,
       description: description,
@@ -38,14 +51,18 @@ const Create_edit = ({ navigation }) => {
       category: category,
     };
     console.log(noteData);
-    // Axios.post(note_endpoints.create, noteData)
-    //   .then((response) => {
-    //     console.log(response);
-    //     navigation.navigate("Home");
-    //   })
-    //   .catch((error) => {
-    //     console.log(error);
-    //   });
+    try {
+      const response = await Axios.post(note_endpoints.create, noteData, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(response.data);
+      navigation.navigate("Home");
+    } catch (error) {
+      console.log(error);
+      console.log(token);
+    }
   };
 
   return (
