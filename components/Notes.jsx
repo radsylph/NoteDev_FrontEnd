@@ -18,16 +18,11 @@ import Icon from "react-native-vector-icons/FontAwesome";
 import { Axios, note_endpoints } from "../constants/axios";
 import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from "@react-navigation/native";
 
-const Notes = ({
-  title,
-  details,
-  category,
-  importancia,
-  id,
-  fav,
-  onDelete,
-}) => {
+const Notes = ({ title, details, category, priority, id, fav, onDelete }) => {
+  const navigation = useNavigation();
+
   const [opened, setOpened] = useState(false);
   const [animation] = useState(new Animated.Value(0));
   const [token, setToken] = useState("");
@@ -36,7 +31,7 @@ const Notes = ({
 
   const getToken = async () => {
     await AsyncStorage.getItem("token").then((token) => {
-      console.log(token);
+      // console.log(token);
       setToken(token);
     });
   };
@@ -77,6 +72,16 @@ const Notes = ({
     ]);
   };
 
+  const editNote = async (id) => {
+    try {
+      await AsyncStorage.setItem("note_id", id).then(async () => {
+        navigation.navigate("EditNote");
+      });
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
   function toggleAccordion() {
     if (!opened) {
       Animated.timing(animation, {
@@ -110,7 +115,7 @@ const Notes = ({
             <View style={{ flexDirection: "row" }}>
               <Text style={{ color: COLORS.white }}>{category}</Text>
               <Text style={{ color: COLORS.white, marginLeft: 6 }}>
-                Nv:{importancia}
+                Nv:{priority}
               </Text>
             </View>
           </View>
@@ -128,7 +133,12 @@ const Notes = ({
                 <Icon name="star" size={35} color={COLORS.white} />
               )}
             </TouchableOpacity>
-            <TouchableOpacity style={{ paddingHorizontal: 11 }}>
+            <TouchableOpacity
+              style={{ paddingHorizontal: 11 }}
+              onPress={() => {
+                editNote(id);
+              }}
+            >
               <Icon name="edit" size={35} color={COLORS.white} />
             </TouchableOpacity>
             <TouchableOpacity
