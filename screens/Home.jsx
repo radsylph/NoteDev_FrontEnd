@@ -19,13 +19,14 @@ import { useState } from "react";
 
 const Home = ({ navigation }) => {
   const [toggleFav, setToggleFav] = useState(false);
+  const [toggleCat, setToggleCat] = useState("");
   return (
     <SafeAreaView>
       <View style={{ flexDirection: "row", height: "auto" }}>
-        <Cathorisonal />
+        <Cathorisonal setToggleCat={setToggleCat} />
       </View>
       <ScrollView style={{ height: "90%" }}>
-        <Card toggleFav={toggleFav} />
+        <Card toggleFav={toggleFav} toggleCat={toggleCat} />
       </ScrollView>
       <View>
         <Floatinbutton setToggleFav={setToggleFav} />
