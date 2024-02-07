@@ -91,7 +91,7 @@ export default function Card({ toggleFav }) {
 
   const getToken = async () => {
     await AsyncStorage.getItem("token").then((token) => {
-      console.log(token);
+      // console.log(token);
       setToken(token);
       getNotes(token);
     });
@@ -135,8 +135,6 @@ export default function Card({ toggleFav }) {
     }
   }, [isFocused]);
 
-  useEffect(() => {}, [notes]);
-
   return (
     <View>
       {toggleFav === false
@@ -146,7 +144,7 @@ export default function Card({ toggleFav }) {
               title={faq.title}
               details={faq.description}
               categoria={faq.category}
-              importancia={faq.priority}
+              priority={faq.priority}
               id={faq._id}
               fav={faq.favorite}
               onDelete={deleteNote}
