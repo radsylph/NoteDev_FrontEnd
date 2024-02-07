@@ -15,19 +15,20 @@ import COLORS from "../constants/colors";
 import Card from "../components/Card";
 import Floatinbutton from "../components/Floatinbutton";
 import Cathorisonal from "../components/Cathorisonal";
-
+import { useState } from "react";
 
 const Home = ({ navigation }) => {
+  const [toggleFav, setToggleFav] = useState(false);
   return (
     <SafeAreaView>
       <View style={{ flexDirection: "row", height: "auto" }}>
         <Cathorisonal />
       </View>
       <ScrollView style={{ height: "90%" }}>
-        <Card />
+        <Card toggleFav={toggleFav} />
       </ScrollView>
       <View>
-        <Floatinbutton />
+        <Floatinbutton setToggleFav={setToggleFav} />
       </View>
     </SafeAreaView>
   );
