@@ -4,5 +4,6 @@ import Signup from "./Signup";
 import Home from "./Home";
 import Create_edit from "./Create_edit";
 import Favorite from "./Favorite";
+import EditNote from "./Edit_note";
 
-export { Login, Welcome, Signup, Home, Create_edit, Favorite };
+export { Login, Welcome, Signup, Home, Create_edit, Favorite, EditNote };
