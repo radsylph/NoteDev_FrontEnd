@@ -19,7 +19,35 @@ import Inputdata from "../components/Inputdata";
 import Seletcat from "../components/Selectcat";
 import Seletimportance from "../components/Seletimportance";
 
+import { useState, useEffect } from "react";
+
+import { Axios, note_endpoints } from "../constants/axios";
+
 const Create_edit = ({ navigation }) => {
+  const [title, setTitle] = useState("");
+  const [description, setDescription] = useState("");
+  const [importance, setImportance] = useState("");
+  const [priority, setPriority] = useState(5);
+  const [category, setCategory] = useState([]);
+
+  const CreateNote = () => {
+    const noteData = {
+      title: title,
+      description: description,
+      priority: priority,
+      category: category,
+    };
+    console.log(noteData);
+    // Axios.post(note_endpoints.create, noteData)
+    //   .then((response) => {
+    //     console.log(response);
+    //     navigation.navigate("Home");
+    //   })
+    //   .catch((error) => {
+    //     console.log(error);
+    //   });
+  };
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: COLORS.purple }}>
       <View style={{ marginHorizontal: 25, marginVertical: 22 }}>
@@ -31,9 +59,9 @@ const Create_edit = ({ navigation }) => {
             color: COLORS.white,
           }}
         >
-          Select Categorie
+          Select Categorie/s
         </Text>
-        <Seletcat />
+        <Seletcat setCategory={setCategory} />
 
         <Text
           style={{
@@ -43,11 +71,22 @@ const Create_edit = ({ navigation }) => {
             color: COLORS.white,
           }}
         >
-          Importance Level
+          Priority Level
         </Text>
-        <Seletimportance />
+        <Seletimportance setPriority={setPriority} />
         <View style={{ marginTop: 12 }}>
-          <Inputdata maxCharacters={250} />
+          <Inputdata
+            maxCharacters={100}
+            placeholder={"title"}
+            setText={setTitle}
+          />
+        </View>
+        <View style={{ marginTop: 12 }}>
+          <Inputdata
+            maxCharacters={300}
+            placeholder={"description"}
+            setText={setDescription}
+          />
         </View>
 
         <Btn
@@ -55,6 +94,9 @@ const Create_edit = ({ navigation }) => {
           Colorbtn={COLORS.light_purple}
           textColor={COLORS.white}
           btnLabel="Create Note"
+          Press={() => {
+            CreateNote();
+          }}
         />
       </View>
     </SafeAreaView>
