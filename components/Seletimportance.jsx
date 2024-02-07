@@ -18,7 +18,7 @@ import Cathorisonal from "../components/Cathorisonal";
 
 import { SelectList } from "react-native-dropdown-select-list";
 
-const Seletimportance = () => {
+const Seletimportance = ({ setPriority }) => {
   const [selected, setSelected] = React.useState("");
 
   const data = [
@@ -42,7 +42,7 @@ const Seletimportance = () => {
         borderColor: COLORS.secundary,
       }}
       dropdownTextStyles={{ backgroundColor: COLORS.white }}
-      setSelected={(val) => setSelected(val)}
+      setSelected={(val) => setPriority(val)}
       data={data}
       save="value"
     />
