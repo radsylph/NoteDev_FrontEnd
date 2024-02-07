@@ -16,7 +16,7 @@ import Card from "./Card";
 import Floatinbutton from "./Floatinbutton";
 import Cathorisonal from "../components/Cathorisonal";
 
-const Inputdata = ({ maxCharacters }) => {
+const Inputdata = ({ maxCharacters, placeholder, setText }) => {
   return (
     <View>
       <TextInput
@@ -24,7 +24,8 @@ const Inputdata = ({ maxCharacters }) => {
         multiline
         numberOfLines={4}
         maxLength={maxCharacters}
-        placeholder="maximum number of characters 250"
+        placeholder={placeholder}
+        onChangeText={(text) => setText(text)}
         style={{ padding: 10, borderRadius: 25, backgroundColor: COLORS.white }}
       />
     </View>
