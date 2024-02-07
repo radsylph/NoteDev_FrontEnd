@@ -32,16 +32,21 @@ const Floatinbutton = ({ setToggleFav }) => {
   const popIn = () => {
     setPop(true);
     Animated.timing(icon_1, {
-      toValue: 250,
+      toValue: 320,
       duration: 500,
       useNativeDriver: false,
     }).start();
     Animated.timing(icon_2, {
-      toValue: 180,
+      toValue: 250,
       duration: 500,
       useNativeDriver: false,
     }).start();
     Animated.timing(icon_3, {
+      toValue: 180,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
+    Animated.timing(icon_4, {
       toValue: 110,
       duration: 500,
       useNativeDriver: false,
@@ -65,6 +70,11 @@ const Floatinbutton = ({ setToggleFav }) => {
       duration: 500,
       useNativeDriver: false,
     }).start();
+    Animated.timing(icon_4, {
+      toValue: -60,
+      duration: 500,
+      useNativeDriver: false,
+    }).start();
   };
 
   return (
@@ -72,11 +82,7 @@ const Floatinbutton = ({ setToggleFav }) => {
       <Animated.View style={[styles.circle, { bottom: icon_1 }]}>
         <TouchableOpacity
           onPress={() => {
-            if (infav === false) {
-              navigation.navigate("Favorite");
-            } else {
-              navigation.navigate("Home");
-            }
+            setToggleFav(!infav);
             setInfav(!infav);
           }}
         >
@@ -89,14 +95,30 @@ const Floatinbutton = ({ setToggleFav }) => {
       </Animated.View>
 
       <Animated.View style={[styles.circle, { bottom: icon_2 }]}>
-        <TouchableOpacity>
+        <TouchableOpacity
+          onPress={async () => {
+            await navigation.navigate("User");
+          }}
+        >
           <Icon name="user-circle" size={25} color={COLORS.white} />
         </TouchableOpacity>
       </Animated.View>
 
       <Animated.View style={[styles.circle, { bottom: icon_3 }]}>
-        <TouchableOpacity onPress={() => test()}>
+        <TouchableOpacity
+          onPress={() => {
+            test();
+          }}
+        >
           <Icon name="sticky-note-o" size={25} color={COLORS.white} />
+        </TouchableOpacity>
+      </Animated.View>
+
+      <Animated.View style={[styles.circle, { bottom: icon_4 }]}>
+        <TouchableOpacity
+          onPress={async () => await navigation.navigate("Create_cat")}
+        >
+          <Icon name="tags" size={25} color={COLORS.white} />
         </TouchableOpacity>
       </Animated.View>
 
