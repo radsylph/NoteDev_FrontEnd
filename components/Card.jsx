@@ -13,6 +13,7 @@ import { Axios, note_endpoints } from "../constants/axios";
 import Notes from "./Notes";
 import { useEffect, useState } from "react";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useIsFocused } from "@react-navigation/native";
 const DATA = [
   {
     id: "bd7acbea-c1b1-46c2-aed5-3ad53abb28ba",
@@ -85,6 +86,8 @@ export default function Card() {
   const [notes, setNotes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [token, setToken] = useState("");
+  const isFocused = useIsFocused();
+
   const getToken = async () => {
     await AsyncStorage.getItem("token").then((token) => {
       console.log(token);
@@ -109,9 +112,11 @@ export default function Card() {
   };
 
   useEffect(() => {
-    getToken();
-    console.log(notes);
-  }, []);
+    if (isFocused) {
+      getToken();
+      console.log(notes);
+    }
+  }, [isFocused]);
 
   return (
     <View>
