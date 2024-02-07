@@ -23,6 +23,7 @@ const note_endpoints = {
   getOne: "notes/get/",
   createCategory: "notes/category",
   getCategories: "notes/getCategories",
+  setFavorite: "notes/favorite/",
 };
 
 export { Axios, user_endpoints, note_endpoints };
