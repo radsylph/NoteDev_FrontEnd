@@ -15,9 +15,10 @@ import COLORS from "../constants/colors";
 import Card from "./Card";
 import { useNavigation } from "@react-navigation/native";
 
-const Floatinbutton = () => {
-  const navigation = useNavigation(); // Obtén el objeto navigation
+const Floatinbutton = ({ setToggleFav }) => {
+  const navigation = useNavigation();
 
+  const [infav, setInfav] = useState(false);
   const [icon_1] = useState(new Animated.Value(20));
   const [icon_2] = useState(new Animated.Value(20));
   const [icon_3] = useState(new Animated.Value(20));
@@ -69,8 +70,21 @@ const Floatinbutton = () => {
   return (
     <View>
       <Animated.View style={[styles.circle, { bottom: icon_1 }]}>
-        <TouchableOpacity>
-          <Icon name="star-o" size={25} color={COLORS.white} />
+        <TouchableOpacity
+          onPress={() => {
+            if (infav === false) {
+              navigation.navigate("Favorite");
+            } else {
+              navigation.navigate("Home");
+            }
+            setInfav(!infav);
+          }}
+        >
+          {infav === true ? (
+            <Icon name="star-o" size={25} color={COLORS.white} />
+          ) : (
+            <Icon name="star" size={25} color={COLORS.white} />
+          )}
         </TouchableOpacity>
       </Animated.View>
 
