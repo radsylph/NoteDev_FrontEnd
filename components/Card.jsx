@@ -125,8 +125,10 @@ export default function Card() {
           key={index.toString()}
           title={faq.title}
           details={faq.description}
-          categoria={faq.category_id}
+          categoria={faq.category}
           importancia={faq.priority}
+          id={faq._id}
+          fav={faq.favorite}
         />
       ))}
     </View>
