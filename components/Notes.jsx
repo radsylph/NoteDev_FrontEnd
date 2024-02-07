@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Animated,
   SafeAreaView,
@@ -15,12 +15,46 @@ import COLORS from "../constants/colors";
 import { AntDesign } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 
-const Notes = ({ title, details, category, importancia }) => {
+import { Axios, note_endpoints } from "../constants/axios";
+
+import AsyncStorage from "@react-native-async-storage/async-storage";
+
+const Notes = ({ title, details, category, importancia, id, fav }) => {
   const [opened, setOpened] = useState(false);
   const [animation] = useState(new Animated.Value(0));
+  const [token, setToken] = useState("");
+  const [isFavorite, setIsFavorite] = useState(fav);
+
+  const getToken = async () => {
+    await AsyncStorage.getItem("token").then((token) => {
+      console.log(token);
+      setToken(token);
+    });
+  };
+
+  useEffect(() => {
+    getToken();
+  }, []);
 
   const numberOfWords = details.split("").length;
 
+  const setFavorite = async (id) => {
+    try {
+      const response = await Axios.patch(
+        note_endpoints.setFavorite + id,
+        {},
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+      console.log(response.data);
+      setIsFavorite(!isFavorite);
+    } catch (error) {
+      console.log(error);
+    }
+  };
   function toggleAccordion() {
     if (!opened) {
       Animated.timing(animation, {
@@ -60,8 +94,17 @@ const Notes = ({ title, details, category, importancia }) => {
           </View>
 
           <View style={{ display: "flex", flexDirection: "row" }}>
-            <TouchableOpacity style={{ paddingHorizontal: 11 }}>
-              <Icon name="star-o" size={35} color={COLORS.white} />
+            <TouchableOpacity
+              style={{ paddingHorizontal: 11 }}
+              onPress={() => {
+                setFavorite(id);
+              }}
+            >
+              {isFavorite === false ? (
+                <Icon name="star-o" size={35} color={COLORS.white} />
+              ) : (
+                <Icon name="star" size={35} color={COLORS.white} />
+              )}
             </TouchableOpacity>
             <TouchableOpacity style={{ paddingHorizontal: 11 }}>
               <Icon name="edit" size={35} color={COLORS.white} />
