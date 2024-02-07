@@ -16,14 +16,23 @@ import { AntDesign } from "@expo/vector-icons";
 import Icon from "react-native-vector-icons/FontAwesome";
 
 import { Axios, note_endpoints } from "../constants/axios";
-
+import { Alert } from "react-native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 
-const Notes = ({ title, details, category, importancia, id, fav }) => {
+const Notes = ({
+  title,
+  details,
+  category,
+  importancia,
+  id,
+  fav,
+  onDelete,
+}) => {
   const [opened, setOpened] = useState(false);
   const [animation] = useState(new Animated.Value(0));
   const [token, setToken] = useState("");
   const [isFavorite, setIsFavorite] = useState(fav);
+  const [isDeleted, setIsDeleted] = useState(false);
 
   const getToken = async () => {
     await AsyncStorage.getItem("token").then((token) => {
@@ -55,6 +64,19 @@ const Notes = ({ title, details, category, importancia, id, fav }) => {
       console.log(error);
     }
   };
+
+  const deleteNote = async (id) => {
+    Alert.alert("Are you sure ? ", "This action cannot be undone", [
+      {
+        text: "Yes",
+        onPress: () => onDelete(id),
+      },
+      {
+        text: "No",
+      },
+    ]);
+  };
+
   function toggleAccordion() {
     if (!opened) {
       Animated.timing(animation, {
@@ -109,11 +131,15 @@ const Notes = ({ title, details, category, importancia, id, fav }) => {
             <TouchableOpacity style={{ paddingHorizontal: 11 }}>
               <Icon name="edit" size={35} color={COLORS.white} />
             </TouchableOpacity>
-            <TouchableOpacity style={{ paddingHorizontal: 11 }}>
+            <TouchableOpacity
+              style={{ paddingHorizontal: 11 }}
+              onPress={() => {
+                deleteNote(id);
+              }}
+            >
               <Icon name="trash-o" size={35} color={COLORS.white} />
             </TouchableOpacity>
           </View>
-
           <AntDesign name={opened ? "caretup" : "caretdown"} size={16} />
         </View>
       </TouchableWithoutFeedback>
