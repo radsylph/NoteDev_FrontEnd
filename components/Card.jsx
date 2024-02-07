@@ -82,7 +82,7 @@ const DATA = [
   },
 ];
 
-export default function Card({ toggleFav }) {
+export default function Card({ toggleFav, toggleCat }) {
   const [notes, setNotes] = useState([]);
   const [categories, setCategories] = useState([]);
   const [onlyFav, setOnlyFav] = useState(false);
@@ -91,11 +91,27 @@ export default function Card({ toggleFav }) {
 
   const getToken = async () => {
     await AsyncStorage.getItem("token").then((token) => {
-      // console.log(token);
+      console.log(token);
       setToken(token);
       getNotes(token);
+      console.log(toggleCat);
     });
   };
+  // const getNotes = async (token) => {
+  //   try {
+  //     console.log(`token: ${token}`);
+  //     const response = await Axios.get(note_endpoints.getNotes, {
+  //       headers: {
+  //         Authorization: `Bearer ${token}`,
+  //       },
+  //     });
+  //     const notes = response.data.notes;
+  //     setNotes(notes.sort((a, b) => a.priority - b.priority));
+  //     // console.log(notes);
+  //   } catch (error) {
+  //     console.log(error);
+  //   }
+  // };
   const getNotes = async (token) => {
     try {
       console.log(`token: ${token}`);
@@ -104,9 +120,15 @@ export default function Card({ toggleFav }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      const notes = response.data.notes;
-      setNotes(notes.sort((a, b) => a.priority - b.priority));
-      console.log(notes);
+      let notes = response.data.notes;
+      notes = notes.sort((a, b) => a.priority - b.priority);
+      if (toggleCat) {
+        notes = notes.filter((note) => note.category.includes(toggleCat));
+      }
+      if (toggleFav) {
+        notes = notes.filter((note) => note.favorite === true);
+      }
+      setNotes(notes);
     } catch (error) {
       console.log(error);
     }
@@ -119,7 +141,7 @@ export default function Card({ toggleFav }) {
           Authorization: `Bearer ${token}`,
         },
       });
-      console.log(response.data);
+      // console.log(response.data);
       setNotes(notes.filter((note) => note._id !== id));
     } catch (error) {
       console.log(error);
@@ -127,13 +149,27 @@ export default function Card({ toggleFav }) {
   };
 
   const favoriteNotes = notes.filter((note) => note.favorite === true);
+  const categoryNotes = notes.filter((note) =>
+    note.category.includes(toggleCat)
+  );
 
   useEffect(() => {
     if (isFocused) {
       getToken();
-      console.log(notes);
+      // console.log(notes);
     }
+    console.log("test");
+    console.log(categoryNotes);
   }, [isFocused]);
+
+  // useEffect(() => {
+  //   getNotes(token);
+  //   setNotes(categoryNotes);
+  // }, [toggleCat]);
+
+  useEffect(() => {
+    getNotes(token);
+  }, [toggleCat, token, toggleFav]);
 
   return (
     <View>
