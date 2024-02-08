@@ -97,21 +97,7 @@ export default function Card({ toggleFav, toggleCat }) {
       console.log(toggleCat);
     });
   };
-  // const getNotes = async (token) => {
-  //   try {
-  //     console.log(`token: ${token}`);
-  //     const response = await Axios.get(note_endpoints.getNotes, {
-  //       headers: {
-  //         Authorization: `Bearer ${token}`,
-  //       },
-  //     });
-  //     const notes = response.data.notes;
-  //     setNotes(notes.sort((a, b) => a.priority - b.priority));
-  //     // console.log(notes);
-  //   } catch (error) {
-  //     console.log(error);
-  //   }
-  // };
+
   const getNotes = async (token) => {
     try {
       console.log(`token: ${token}`);
