@@ -13,6 +13,7 @@ const user_endpoints = {
   login: "users/login",
   edit: "users/edit",
   delete: "users/delete",
+  getUser: "users/getUser/",
 };
 
 const note_endpoints = {
