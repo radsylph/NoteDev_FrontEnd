@@ -10,6 +10,8 @@ import {
   Create_edit,
   Favorite,
   EditNote,
+  User,
+  Create_cat,
 } from "./screens";
 
 const Stack = createNativeStackNavigator();
@@ -66,6 +68,20 @@ export default function App() {
         <Stack.Screen
           name="EditNote"
           component={EditNote}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="User"
+          component={User}
+          options={{
+            headerShown: false,
+          }}
+        />
+        <Stack.Screen
+          name="Create_cat"
+          component={Create_cat}
           options={{
             headerShown: false,
           }}
