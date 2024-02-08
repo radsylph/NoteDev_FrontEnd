@@ -10,6 +10,7 @@ import {
 import COLORS from "../constants/colors";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Axios, note_endpoints } from "../constants/axios";
+import { useIsFocused } from "@react-navigation/native";
 
 const DATA = [
   {
@@ -36,6 +37,7 @@ const Item = ({ item, onPress, backgroundColor, textColor }) => (
 );
 
 const App = ({ setToggleCat }) => {
+  const isFocused = useIsFocused();
   const [selectedId, setSelectedId] = useState();
   const [categories, setCategories] = useState([""]);
   const [token, setToken] = useState("");
@@ -61,8 +63,10 @@ const App = ({ setToggleCat }) => {
   };
 
   useEffect(() => {
-    getToken();
-  }, []);
+    if (isFocused) {
+      getToken();
+    }
+  }, [isFocused]);
 
   const renderItem = ({ item }) => {
     const backgroundColor =
