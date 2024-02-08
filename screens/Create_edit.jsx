@@ -44,6 +44,10 @@ const Create_edit = ({ navigation }) => {
   }, []);
 
   const CreateNote = async () => {
+    if (title === "" || description === "" || priority === "") {
+      alert("Please fill all the fields");
+      return;
+    }
     const noteData = {
       title: title,
       description: description,
